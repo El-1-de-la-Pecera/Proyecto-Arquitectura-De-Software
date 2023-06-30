@@ -16,20 +16,26 @@ password = config['password']
 
 
 class App:
-    def __init__(self, login_service, services=[]) -> None:
-        
+    def __init__(self, login_service, services=[]) -> None:        
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(server_ip, port=server_port, username=username, password=password)
         self.sock = client.invoke_shell()
         self.login_service = login_service
         self.services = services
-
         transport = client.get_transport()
+        
         if transport and transport.is_active():
             print("Conexión SSH establecida correctamente.")
         else:
             print("No se pudo establecer la conexión SSH.")
+
+    def send_msg(self, msg, service_id):
+        req = bus_format(msg, service_id).encode('utf-8')
+        self.sock.sendall(req)
+        res = self.sock.recv(1024).decode('utf-8')
+        return res
+
 
     def login(self):
         inputs = {}
@@ -37,6 +43,8 @@ class App:
             actual_input = self.login_service['inputs'][i]
             key = actual_input['key']
             inputs[key] = input(actual_input['desc'])
+        req = bus_format(inputs, self.login_service['id']).encode('utf-8')
+        self.sock.sendall(req)
         res = self.send_msg(inputs, self.login_service['id'])
         return res
 
