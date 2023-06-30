@@ -3,9 +3,25 @@ import socket as sk
 import time
 from src.services.utils import bus_format
 from src.db.tables import create_tablas, remove_tablas, insertar_usuario
+import paramiko
+import json
+
+with open('config.json') as file:
+    config = json.load(file)
+
+server_ip = config['server_ip']
+server_port = config['server_port']
+username = config['username']
+password = config['password']
+
+client = paramiko.SSHClient()
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+client.connect(server_ip, port=server_port, username=username, password=password)
+
 
 class App:
     def __init__(self, login_service, services=[]) -> None:
+
         self.sock = sk.socket(sk.AF_INET, sk.SOCK_STREAM)
         server_address = ('localhost', 5000)
         self.sock.connect(server_address)
