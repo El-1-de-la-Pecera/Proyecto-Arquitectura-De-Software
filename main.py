@@ -182,7 +182,7 @@ if __name__ == '__main__':
         ]
     )
 
-#    remove_tablas()
-#    create_tablas()
-#    insertar_usuario('admin', 'admin', 0)
+    remove_tablas()
+    create_tablas()
+    insertar_usuario( 'admin', 'admin', 1 )
     app.login_menu()

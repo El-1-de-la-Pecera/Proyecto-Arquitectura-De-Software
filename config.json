@@ -2,5 +2,7 @@
     "server_ip": "200.14.84.16",
     "server_port": 8080,
     "username": "joaquin.neira",
-    "password": "UDP20162"
+    "password": "UDP20162",
+    "bus_server_ip": "127.0.0.1",
+    "bus_server_port": 5000
   }

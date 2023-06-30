@@ -24,7 +24,7 @@ def create_tablas():
         CREATE TABLE IF NOT EXISTS usuarios (
             ID INTEGER PRIMARY KEY AUTOINCREMENT,
             Nombre TEXT NOT NULL,
-            Clave REAL NOT NULL,
+            Clave TEXT NOT NULL,
             Rol INTEGER NOT NULL
         );
     ''')
@@ -47,7 +47,7 @@ def insertar_usuario(nombre, clave, tipo):
     conexion = sqlite3.connect('db.sqlite3')
     cursor = conexion.cursor()
     cursor.execute('''
-        INSERT INTO usuarios (Nombre, Clave, Tipo) VALUES (?, ?, ?);
+        INSERT INTO usuarios (Nombre, Clave, Rol) VALUES (?, ?, ?);
     ''', (nombre, clave, tipo))
     conexion.commit()
     conexion.close()
