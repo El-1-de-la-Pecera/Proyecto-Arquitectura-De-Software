@@ -15,11 +15,17 @@ def create_tablas():
         );
     ''')
     cursor.execute('''
+        CREATE TABLE IF NOT EXISTS EstadoProducto (
+            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            Descripcion TEXT NOT NULL
+        );
+    ''')
+    cursor.execute('''
         CREATE TABLE IF NOT EXISTS usuarios (
             ID INTEGER PRIMARY KEY AUTOINCREMENT,
             Nombre TEXT NOT NULL,
             Clave REAL NOT NULL,
-            Tipo INTEGER NOT NULL
+            Rol INTEGER NOT NULL
         );
     ''')
     conexion.commit()
