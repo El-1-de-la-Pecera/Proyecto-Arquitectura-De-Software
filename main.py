@@ -14,27 +14,22 @@ server_port = config['server_port']
 username = config['username']
 password = config['password']
 
-client = paramiko.SSHClient()
-client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-client.connect(server_ip, port=server_port, username=username, password=password)
-
 
 class App:
     def __init__(self, login_service, services=[]) -> None:
-
-        self.sock = sk.socket(sk.AF_INET, sk.SOCK_STREAM)
-        server_address = ('localhost', 5000)
-        self.sock.connect(server_address)
+        
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(server_ip, port=server_port, username=username, password=password)
+        self.sock = client.invoke_shell()
         self.login_service = login_service
         self.services = services
 
-    def send_msg(self, msg, name='g7999'):
-        req = bus_format(msg, name).encode('utf-8')
-        
-        print('sending "%s"' % req)
-        time.sleep(2)
-        self.sock.sendall(req) #error
-        return self.sock.recv(1024).decode('utf-8')
+        transport = client.get_transport()
+        if transport and transport.is_active():
+            print("Conexión SSH establecida correctamente.")
+        else:
+            print("No se pudo establecer la conexión SSH.")
 
     def login(self):
         inputs = {}
